@@ -39,7 +39,7 @@ def _parse_score(output):
     return 0.0
 _ERROR_CODE_REGEXP=re.compile(r'^.+:\d+: \w+ \((\w\d\d\d\d),')
 
-def _is_not_acceptable_pylint_error(output):
+def _is_not_acceptable_pylint_error(output,list_of_codes):
     for line in output.splitlines():
         if line[:5]=='*****':
             print (line)
@@ -47,7 +47,7 @@ def _is_not_acceptable_pylint_error(output):
         match = re.match(_ERROR_CODE_REGEXP,line)
         if match:
             print (line)
-            if match.group(1) != 'W0511':
+            if match.group(1) not in list_of_codes:
                 return False
     return True
 
@@ -91,16 +91,15 @@ def check_score(argv=None):
     #         print("PASSED")
     if argv is None:
         argv = sys.argv[1:]
-    print (argv)
+    
     parser = argparse.ArgumentParser(__name__)
-    parser.add_argument('--codes', help='csv of codes to allow passing while still displaying them.')
+    parser.add_argument('--codes-to-allow', help='csv of codes to allow passing while still displaying them.')
+    
 
     ns, argv = parser.parse_known_args(argv)
-    print (ns)
-    print (argv)
-    print (ns.codes)
-    list_of_codes = ns.codes.split(',')
-    print (list_of_codes)
+    list_of_codes = ns.codes_to_allow.split(',')
+    if len(list_of_codes) > 0:
+        print ("Displaying any instances of these codes but still allowing commit: %s" % ' '.join(list_of_codes))
     all_passed = True
 
 
@@ -108,9 +107,7 @@ def check_score(argv=None):
 
     output = pylint_stdout.getvalue()
     
-    all_passed = _is_not_acceptable_pylint_error(output)
-    print (all_passed)
-    print (len(output.splitlines()))
+    all_passed = _is_not_acceptable_pylint_error(output,list_of_codes)
     # score = _parse_score(output)
     # passed = score >= ns.limit
     # print("%.2f/%.2f" % (score, ns.limit), end="\t")
