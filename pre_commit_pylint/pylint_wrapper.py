@@ -97,8 +97,10 @@ def check_score(argv=None):
     pylint_stdout, pylint_stderr = _run_pylint(argv)
 
     output = pylint_stdout.getvalue()
-    print (output)
+    
     all_passed = _is_not_acceptable_pylint_error(output)
+    print (all_passed)
+    print (len(output.splitlines()))
     # score = _parse_score(output)
     # passed = score >= ns.limit
     # print("%.2f/%.2f" % (score, ns.limit), end="\t")
