@@ -11,7 +11,7 @@
     language: script
     files: \.py$
 -   id: pylint-pass-with-displayed-warnings
-    name: Pylint Score Limit
+    name: Pylint Pass With Displayed Warnings
     description: This hook runs pylint and still allows it to pass if certain warning codes are displayed
     entry: ./score_limit.py
     language: script
