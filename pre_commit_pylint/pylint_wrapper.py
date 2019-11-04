@@ -40,6 +40,7 @@ def _parse_score(output):
 _ERROR_CODE_REGEXP=re.compile(r'^.+:\d+: \w+ \((\w\d\d\d\d),')
 
 def _is_not_acceptable_pylint_error(output,list_of_codes):
+    is_acceptable=True
     for line in output.splitlines():
         if line[:5]=='*****':
             print (line)
@@ -48,8 +49,8 @@ def _is_not_acceptable_pylint_error(output,list_of_codes):
         if match:
             print (line)
             if match.group(1) not in list_of_codes:
-                return False
-    return True
+                return is_acceptable
+    return is_acceptable
 
 def _run_pylint(argv=None):
     return lint.py_run(" ".join(argv), return_std=True)
