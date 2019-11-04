@@ -37,7 +37,7 @@ def _parse_score(output):
         if match:
             return float(match.group(1))
     return 0.0
-_ERROR_CODE_REGEXP=re.compile(r'^.+:\d+: \w+ \((\w\d\d\d\d),'))
+_ERROR_CODE_REGEXP=re.compile(r'^.+:\d+: \w+ \((\w\d\d\d\d),')
 
 def _is_not_acceptable_pylint_error(output):
     for line in output.splitlines():
