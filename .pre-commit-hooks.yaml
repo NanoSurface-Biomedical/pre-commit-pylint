@@ -15,4 +15,3 @@
     description: This hook runs pylint and still allows it to pass if certain warning codes are displayed
     entry: ./score_limit.py
     language: script
-    files: \.py$

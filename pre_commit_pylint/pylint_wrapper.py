@@ -102,7 +102,7 @@ def check_score(argv=None):
     if len(list_of_codes) > 0:
         print ("Displaying any instances of these codes but still allowing commit: %s" % ' '.join(list_of_codes))
     all_passed = True
-
+    print (argv)
 
     pylint_stdout, pylint_stderr = _run_pylint(argv)
 
