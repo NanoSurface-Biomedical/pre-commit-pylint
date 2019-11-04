@@ -100,7 +100,7 @@ def check_score(argv=None):
     ns, argv = parser.parse_known_args(argv)
     list_of_codes = ns.codes_to_allow.split(',')
     if len(list_of_codes) > 0:
-        print ("Displaying any instances of these codes but still allowing commit: %s" % ' '.join(list_of_codes))
+        lines_to_print.append("Displaying any instances of these codes but still allowing commit: %s" % ' '.join(list_of_codes))
     all_passed = True
     
     new_argv=[]
