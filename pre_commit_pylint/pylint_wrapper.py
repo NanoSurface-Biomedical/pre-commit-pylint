@@ -92,7 +92,11 @@ def check_score(argv=None):
     if argv is None:
         argv = sys.argv[1:]
 
+    parser = argparse.ArgumentParser(__name__)
+    parser.add_argument('codes', nargs='*', help='codes to allow passing while still displaying them.')
 
+    ns, argv = parser.parse_known_args(argv)
+    print (ns.codes)
     all_passed = True
 
 
