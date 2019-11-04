@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 # -*- coding:utf-8 -*-
 """A wrapper for pylint that implements score limit and Python 3 porting check.
+Forked from Botpy/pre-commit-pylint
 """
 from __future__ import division
 from __future__ import print_function
@@ -36,7 +37,17 @@ def _parse_score(output):
         if match:
             return float(match.group(1))
     return 0.0
+_ERROR_CODE_REGEXP=re.compile(r'^.+:\d+: \w+ \((\w\d\d\d\d),'))
 
+def _is_not_acceptable_pylint_error(output):
+    for line in output.splitlines():
+        if line[:5]=='*****':
+            continue
+        match = re.match(_ERROR_CODE_REGEXP,line)
+        if match:
+            if match.group(1) != 'W0511':
+                return False
+    return True
 
 def _run_pylint(argv=None):
     return lint.py_run(" ".join(argv), return_std=True)
@@ -45,37 +56,59 @@ def _run_pylint(argv=None):
 def check_score(argv=None):
     """Check score limit."""
 
+    # if argv is None:
+    #     argv = sys.argv[1:]
+
+    # parser = argparse.ArgumentParser(__name__)
+    # parser.add_argument('filenames', nargs='*', help='filenames to check.')
+
+    # parser.add_argument("--limit", default=8.0, type=float,
+    #                     help=('Score limit, files with a lower score will '
+    #                           'stop the commit. Default: 8.0'))
+
+    # ns, argv = parser.parse_known_args(argv)
+
+    # all_passed = True
+
+    # for i, filename in enumerate(ns.filenames):
+    #     print("Running pylint on %s (file %d/%d).." % (
+    #         filename, i + 1, len(ns.filenames)), end="\t")
+
+    #     pylint_stdout, pylint_stderr = _run_pylint([filename] + argv)
+
+    #     output = pylint_stdout.getvalue()
+    #     score = _parse_score(output)
+    #     passed = score >= ns.limit
+    #     print("%.2f/%.2f" % (score, ns.limit), end="\t")
+
+    #     if (not passed):
+    #         print("FAILED")
+    #         print(output)
+    #         all_passed = False
+    #     else:
+    #         print("PASSED")
     if argv is None:
         argv = sys.argv[1:]
 
-    parser = argparse.ArgumentParser(__name__)
-    parser.add_argument('filenames', nargs='*', help='filenames to check.')
-
-    parser.add_argument("--limit", default=8.0, type=float,
-                        help=('Score limit, files with a lower score will '
-                              'stop the commit. Default: 8.0'))
-
-    ns, argv = parser.parse_known_args(argv)
 
     all_passed = True
 
-    for i, filename in enumerate(ns.filenames):
-        print("Running pylint on %s (file %d/%d).." % (
-            filename, i + 1, len(ns.filenames)), end="\t")
 
-        pylint_stdout, pylint_stderr = _run_pylint([filename] + argv)
+    pylint_stdout, pylint_stderr = _run_pylint(argv)
 
-        output = pylint_stdout.getvalue()
-        score = _parse_score(output)
-        passed = score >= ns.limit
-        print("%.2f/%.2f" % (score, ns.limit), end="\t")
+    output = pylint_stdout.getvalue()
+    print (output)
+    all_passed = _is_not_acceptable_pylint_error(output)
+    # score = _parse_score(output)
+    # passed = score >= ns.limit
+    # print("%.2f/%.2f" % (score, ns.limit), end="\t")
 
-        if (not passed):
-            print("FAILED")
-            print(output)
-            all_passed = False
-        else:
-            print("PASSED")
+    # if (not passed):
+    #     print("FAILED")
+    #     print(output)
+    #     all_passed = False
+    # else:
+    #     print("PASSED")
 
     sys.exit(all_passed - 1)
 
