@@ -38,11 +38,12 @@ def _parse_score(output):
             return float(match.group(1))
     return 0.0
 _ERROR_CODE_REGEXP=re.compile(r'^.+:\d+: \w+ \((\w\d\d\d\d),')
-
+lines_to_print=[]
 def _is_not_acceptable_pylint_error(output,list_of_codes):
+    global lines_to_print
     is_acceptable=True
     for line in output.splitlines():
-        print (line)
+        lines_to_print.append(line)
         if line[:5]=='*****':
             continue
         match = re.match(_ERROR_CODE_REGEXP,line)
@@ -116,7 +117,10 @@ def check_score(argv=None):
     output = pylint_stdout.getvalue()
     
     all_passed = _is_not_acceptable_pylint_error(output,list_of_codes)
-    # score = _parse_score(output)
+    score = _parse_score(output)
+    if score < 10:
+        for this_line in lines_to_print:
+            print (this_line)
     # passed = score >= ns.limit
     # print("%.2f/%.2f" % (score, ns.limit), end="\t")
 
