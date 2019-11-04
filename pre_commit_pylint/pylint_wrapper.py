@@ -49,7 +49,7 @@ def _is_not_acceptable_pylint_error(output,list_of_codes):
         if match:
             print (line)
             if match.group(1) not in list_of_codes:
-                return is_acceptable
+                is_acceptable=False
     return is_acceptable
 
 def _run_pylint(argv=None):
