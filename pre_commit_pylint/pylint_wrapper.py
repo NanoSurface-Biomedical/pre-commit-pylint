@@ -112,7 +112,7 @@ def check_score(argv=None):
     #     new_argv.append(this_arg)
     # print (new_argv)
 
-    pylint_stdout, pylint_stderr = _run_pylint(new_argv)
+    pylint_stdout, pylint_stderr = _run_pylint(argv)
 
     output = pylint_stdout.getvalue()
     
