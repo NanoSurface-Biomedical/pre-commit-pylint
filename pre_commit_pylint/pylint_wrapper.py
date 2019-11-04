@@ -42,9 +42,11 @@ _ERROR_CODE_REGEXP=re.compile(r'^.+:\d+: \w+ \((\w\d\d\d\d),')
 def _is_not_acceptable_pylint_error(output):
     for line in output.splitlines():
         if line[:5]=='*****':
+            print (line)
             continue
         match = re.match(_ERROR_CODE_REGEXP,line)
         if match:
+            print (line)
             if match.group(1) != 'W0511':
                 return False
     return True
