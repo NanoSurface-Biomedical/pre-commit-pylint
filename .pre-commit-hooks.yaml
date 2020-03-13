@@ -16,3 +16,10 @@
     entry: ./score_limit.py
     language: script
     files: \.py$
+-   id: python-check-no-print-statments
+    name: check blanket noqa
+    description: 'Enforce that print statements are not committed. If intentional, print statements can be allowed be: # allow-print '
+    entry: '^\s*(?# allow spaces in front of print, but exclude anything that is text so that a function could end in print )print\s*(?# allow spaces in between the end of print and the open parentheses )\((?!.* \# allow-print.*)'
+    language: pygrep
+    types: [python]
+    
