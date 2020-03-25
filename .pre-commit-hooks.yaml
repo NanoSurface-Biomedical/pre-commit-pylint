@@ -17,9 +17,16 @@
     language: script
     files: \.py$
 -   id: python-check-no-print-statments
-    name: check blanket noqa
-    description: 'Enforce that print statements are not committed. If intentional, print statements can be allowed be: # allow-print '
+    name: Check no Python print statements
+    description: 'Enforce that print statements are not committed. If intentional, print statements can be allowed by: # allow-print '
     entry: '^\s*(?# allow spaces in front of print, but exclude anything that is text so that a function could end in print )print\s*(?# allow spaces in between the end of print and the open parentheses )\((?!.* \# allow-print.*)'
     language: pygrep
     types: [python]
+-   id: vuejs-check-no-console-log-statments
+    name: Check no console log statements
+    description: 'Enforce that console.log statements are not committed. If intentional, statements can be allowed by: // allow-log '
+    entry: '^\s*(?# allow spaces in front of console, but exclude anything that is text so that a function could end in console )console\.log\((?!.* \/\/.* allow-log.*)'
+    language: pygrep
+    types: [javascript,vue]
+    
     
