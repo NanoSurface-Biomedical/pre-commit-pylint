@@ -25,7 +25,8 @@
 -   id: vuejs-check-no-console-log-statments
     name: Check no console log statements
     description: 'Enforce that console.log statements are not committed. If intentional, statements can be allowed by: // allow-log '
-    entry: '^\s*(?# allow spaces in front of console, but exclude anything that is text so that a function could end in console )console\.log\((?!.* \/\/.* allow-log.*)'
+    entry: '^\s*(?# allow spaces in front of console, but exclude anything that is text so that a function could end in console )console\.log\((?!.*\s+(?# allow it to span multiple lines because currently prettier often forces comments onto the next line )\/\/.* allow-log.*)'
+    args: [--multiline]
     language: pygrep
     types: [file]
     files: \.(js|vue)$    
