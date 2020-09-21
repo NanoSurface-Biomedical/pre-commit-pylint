@@ -33,7 +33,7 @@
 -   id: vuejs-check-no-import-from-vue-file
     name: Check nothing imported directly from vue files
     description: 'Enforce in libraries that in the test pages that nothing is imported directly from .vue files (everything should be imported from built dist files)'
-    entry: '^import.*from.*\.vue\"'
+    entry: '^\s*import.*from.*\.vue\"'
     args: [--multiline]
     language: pygrep
     types: [file]
